@@ -1,2 +1,5 @@
 /nixd-out
 /curl
+repl-result-out
+t
+mapFlakes
