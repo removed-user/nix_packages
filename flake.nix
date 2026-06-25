@@ -11,7 +11,9 @@
     nixpkgs,
     ...
   }:
-    flake-parts.lib.mkFlake {inherit inputs;} {
+    flake-parts.lib.mkFlake {
+      inherit inputs;
+    } {
       imports = [
         inputs.flake-parts.flakeModules.flakeModules
         inputs.flake-parts.flakeModules.modules
@@ -28,31 +30,37 @@
       ];
       systems = ["x86_64-linux"];
 
-      perSystem = {
-        config,
-        self',
-        inputs',
-        pkgs,
-        system ? "x86_64-linux",
-        ...
-      }: let
-        bootStrap = inputs'.nixpkgs.legacyPackages.minimal-bootstrap;
-        inputs.nixpkgs.config.replaceStdenv = inputs'.nixpkgs.legacyPackages.minimal-bootstrap;
-      in {
-        # Per-system attributes can be defined here. The self' and inputs'
-        # module parameters provide easy access to attributes of the same
-        # system.
+      perSystem = let
+        lib = nixpkgs.lib;
+      in
+        {
+          config,
+          # self',
+          inputs',
+          pkgs,
+          ...
+        }: let
+          bootStrap = lib.recurseIntoAttrs inputs'.nixpkgs.legacyPackages.minimal-bootstrap;
+          # inputs.nixpkgs.config.replaceStdenv = inputs'.nixpkgs.legacyPackages.minimal-bootstrap;
+        in {
+          # Per-system attributes can be defined here. The self' and inputs'
+          # module parameters provide easy access to attributes of the same
+          # system.
 
-        legacyPackages = {
-          inherit bootStrap;
-        };
+          legacyPackages = {
+            config-store = "";
+            inherit bootStrap;
+            list = builtins.attrNames bootStrap;
+          };
 
-        # Equivalent to  inputs'.nixpkgs.legacyPackages.hello;
-        packages = {
-          # bash = bootStrap.bash;
+          # Equivalent to  inputs'.nixpkgs.legacyPackages.hello;
+          packages = {
+            bash = bootStrap.bash;
+            guix = pkgs.callPackageWith {} pkgs.guix;
+          };
         };
-      };
       flake = {
+        config.strictDepsByDefault = true;
         # The usual flake attributes can be defined here, including system-
         # agnostic ones like nixosModule and system-enumerating ones, although
         # those are more easily expressed in perSystem.
