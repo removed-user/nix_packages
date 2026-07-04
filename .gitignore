@@ -3,3 +3,4 @@
 repl-result-out
 t
 mapFlakes
+nix-conf/
