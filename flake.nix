@@ -76,10 +76,10 @@
           # list = builtins.attrNames bootStrap;
           system = null;
           guix = pkgs.guix;
-          hostPlaform.libc = pkgs.musl;
-          lix_static = pkgs.lixStatic;
-          xz = bootStrap.xz;
-          gzip = bootStrap.gzip;
+          lixStatic = pkgs.lixStatic;
+
+          xz = pkgs.minimal-bootstrap.xz;
+          gzip = pkgs.minimal-bootstrap.gzip;
         };
 
         # Equivalent to  inputs'.nixpkgs.legacyPackages.hello;
