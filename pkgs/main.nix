@@ -17,6 +17,7 @@ import inputs.nixpkgs {
     # inherit pkgs;
     # overrideCC = inputs.nixpkgs.pkgs.musl;
     # libc = inputs.nixpkgs.pkgs.musl;
+    fetchedSourceNameDefault = full;
     strictDepsByDefault = true;
     warnUndeclaredOptions = true;
     # nix = nix // lix;

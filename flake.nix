@@ -61,9 +61,6 @@
         inputs.flake-parts.flakeModules.formatter
       ];
 
-      # let
-      # inputs.nixpkgs.config.replaceStdenv = inputs'.nixpkgs.legacyPackages.minimal-bootstrap;
-      # in
       perSystem = {
         config,
         self',
@@ -73,6 +70,7 @@
       }: {
         legacyPackages = {
           inherit bootStrap;
+          # inherit (curles) curl curlMinimal;
           # list = builtins.attrNames bootStrap;
           system = null;
           guix = pkgs.guix;
