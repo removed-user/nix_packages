@@ -6,31 +6,30 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   };
 
-  outputs = inputs @ {
+  outputs = {
     # flake-parts-lib,
     nixpkgs,
     self,
     ...
-  }: let
-    _module.args.system = "x86_64-linux";
-    system = _module.args.system;
+  } @ inputs: let
     lib = nixpkgs.lib;
     flake-parts-lib = inputs.flake-parts.lib;
-    # _module.args.pkgs = pkgs;
-    specialArgs = {
-      system = "x86_64-linux";
-    };
+    bootStrap = {pkgs, ...}: lib.recurseIntoAttrs pkgs.minimal-bootstrap;
     ###
-    pkgs = _module.args.pkgs;
-    ###
-    _module.args.pkgs = {
+    system = "x86_64-linux";
+
+    pkgs = {
       inputs,
-      system ? specialArgs.system,
+      system,
       ...
     }: {
+      inherit inputs system;
       imports = [./pkgs/main.nix];
     };
-
+    _module.args = {
+      pkgs = {inherit pkgs;};
+      system = {inherit system;};
+    };
     # stdenv = _module.args.stdenv;
     # _module.args.stdenv = {
     #   inputs,
@@ -39,11 +38,13 @@
     # }: {
     #   imports = [./pkgs/stdenv.nix];
     # };
-    config.debug = true;
+
+    systems = ["x86_64-linux"];
   in
     flake-parts-lib.mkFlake {
       inherit inputs;
-    } {
+    }
+    {
       imports = [
         # inputs.flake-parts.flakeModules.flakeModules
         inputs.flake-parts.flakeModules.modules
@@ -60,29 +61,29 @@
         inputs.flake-parts.flakeModules.formatter
       ];
 
-      perSystem = let
-        bootStrap = {pkgs, ...}: lib.recurseIntoAttrs pkgs.minimal-bootstrap;
-        # inputs.nixpkgs.config.replaceStdenv = inputs'.nixpkgs.legacyPackages.minimal-bootstrap;
-      in
-        {
-          config,
-          # self',
-          inputs',
-          pkgs,
-          system,
-          ...
-        }: {
-          self.legacyPackages = {
-            inherit bootStrap;
-            list = builtins.attrNames bootStrap;
-            guix = inputs'.nixpkgs.legacyPackages.guix;
-          };
-
-          # Equivalent to  inputs'.nixpkgs.legacyPackages.hello;
-          packages = {
-            bash = bootStrap.bash;
-          };
+      # let
+      # inputs.nixpkgs.config.replaceStdenv = inputs'.nixpkgs.legacyPackages.minimal-bootstrap;
+      # in
+      perSystem = {
+        config,
+        self',
+        pkgs,
+        system,
+        ...
+      }: {
+        legacyPackages = {
+          inherit system;
+          inherit bootStrap;
+          # list = builtins.attrNames bootStrap;
+          guix = pkgs.guix;
         };
+
+        # Equivalent to  inputs'.nixpkgs.legacyPackages.hello;
+        packages = {
+          inherit system;
+          bash = bootStrap.bash;
+        };
+      };
       flake = {
         # config.strictDepsByDefault = true;
         # The usual flake attributes can be defined here, including system-
