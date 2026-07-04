@@ -38,13 +38,13 @@
     # }: {
     #   imports = [./pkgs/stdenv.nix];
     # };
-
-    systems = ["x86_64-linux"];
   in
     flake-parts-lib.mkFlake {
       inherit inputs;
     }
     {
+      systems = ["x86_64-linux"];
+      # pkgs = {inherit pkgs;};
       imports = [
         # inputs.flake-parts.flakeModules.flakeModules
         inputs.flake-parts.flakeModules.modules
@@ -72,7 +72,6 @@
         ...
       }: {
         legacyPackages = {
-          inherit system;
           inherit bootStrap;
           # list = builtins.attrNames bootStrap;
           guix = pkgs.guix;
