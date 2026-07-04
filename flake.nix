@@ -40,11 +40,10 @@
           self',
           inputs',
           pkgs,
-	  system',
+          system',
           ...
         }: let
-
-	bootStrap = lib.recurseIntoAttrs inputs'.nixpkgs.legacyPackages.minimal-bootstrap;
+          bootStrap = lib.recurseIntoAttrs inputs'.nixpkgs.legacyPackages.minimal-bootstrap;
           # inputs.nixpkgs.config.replaceStdenv = inputs'.nixpkgs.legacyPackages.minimal-bootstrap;
         in {
           # Per-system attributes can be defined here. The self' and inputs'
@@ -54,12 +53,11 @@
           legacyPackages = {
             inherit bootStrap;
             list = builtins.attrNames bootStrap;
-	guix = inputs'.nixpkgs.legacyPackages.guix;
+            guix = inputs'.nixpkgs.legacyPackages.guix;
           };
 
           # Equivalent to  inputs'.nixpkgs.legacyPackages.hello;
           packages = {
-
             bash = bootStrap.bash;
           };
         };
