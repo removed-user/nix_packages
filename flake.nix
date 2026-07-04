@@ -14,7 +14,7 @@
   } @ inputs: let
     lib = nixpkgs.lib;
     flake-parts-lib = inputs.flake-parts.lib;
-    bootStrap = {pkgs, ...}: lib.recurseIntoAttrs pkgs.minimal-bootstrap;
+    bootStrap = {pkgs, ...}: pkgs.minimal-bootstrap;
     ###
     system = "x86_64-linux";
 
@@ -74,12 +74,16 @@
         legacyPackages = {
           inherit bootStrap;
           # list = builtins.attrNames bootStrap;
+          system = null;
           guix = pkgs.guix;
+          hostPlaform.libc = pkgs.musl;
+          lix_static = pkgs.lixStatic;
+          xz = bootStrap.xz;
+          gzip = bootStrap.gzip;
         };
 
         # Equivalent to  inputs'.nixpkgs.legacyPackages.hello;
         packages = {
-          inherit system;
           bash = bootStrap.bash;
         };
       };
