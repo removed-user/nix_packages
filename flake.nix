@@ -15,7 +15,7 @@
       inherit inputs;
     } {
       imports = [
-        inputs.flake-parts.flakeModules.flakeModules
+        # inputs.flake-parts.flakeModules.flakeModules
         inputs.flake-parts.flakeModules.modules
         inputs.flake-parts.flakeModules.debug
         inputs.flake-parts.flakeModules.partitions
@@ -28,19 +28,23 @@
         inputs.flake-parts.flakeModules.devShells
         inputs.flake-parts.flakeModules.formatter
       ];
-      systems = ["x86_64-linux"];
 
       perSystem = let
+        config.strictDepsByDefault = true;
         lib = nixpkgs.lib;
+
+        system = "x86_64-linux";
       in
         {
           config,
-          # self',
+          self',
           inputs',
           pkgs,
+	  system',
           ...
         }: let
-          bootStrap = lib.recurseIntoAttrs inputs'.nixpkgs.legacyPackages.minimal-bootstrap;
+
+	bootStrap = lib.recurseIntoAttrs inputs'.nixpkgs.legacyPackages.minimal-bootstrap;
           # inputs.nixpkgs.config.replaceStdenv = inputs'.nixpkgs.legacyPackages.minimal-bootstrap;
         in {
           # Per-system attributes can be defined here. The self' and inputs'
@@ -48,15 +52,15 @@
           # system.
 
           legacyPackages = {
-            config-store = "";
             inherit bootStrap;
             list = builtins.attrNames bootStrap;
+	guix = inputs'.nixpkgs.legacyPackages.guix;
           };
 
           # Equivalent to  inputs'.nixpkgs.legacyPackages.hello;
           packages = {
+
             bash = bootStrap.bash;
-            guix = pkgs.callPackageWith {} pkgs.guix;
           };
         };
       flake = {
