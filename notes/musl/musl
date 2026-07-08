@@ -1,0 +1,1 @@
+[ { abi = { name = "musl"; }; } { abi = { eabi = true; float = "soft"; name = "musleabi"; }; } { abi = { eabi = true; float = "hard"; name = "musleabihf"; }; } { abi = { abi = "n32"; name = "muslabin32"; }; } { abi = { abi = "64"; name = "muslabi64"; }; } ]
