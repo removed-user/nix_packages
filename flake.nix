@@ -16,13 +16,14 @@
     flake-parts-lib = inputs.flake-parts.lib;
     hostSystem.libc = "musl";
     hostPlatform.libc = "musl";
-     localSystem = {
-    #     system = "x86_64-linux"
-    #   # isLinux = true;
-        libc = "musl";
-    #   # isMusl = true;
-    #   # abi = "musl";
-     };
+    crossSystem = {config = "x86_64-unknown-linux-gnu";};
+    localSystem = {
+      #     system = "x86_64-linux"
+      #   # isLinux = true;
+      libc = "musl";
+      #   # isMusl = true;
+      #   # abi = "musl";
+    };
     # bootStrap = {pkgs, ...}: pkgs.minimal-bootstrap;
 
     # stdenv = pkgs.pkgsStatic;
@@ -100,7 +101,7 @@
           guix = pkgs.guix;
           guile = pkgs.guile;
           lixStatic = pkgs.lixStatic;
-libc = pkgs.musl;
+          libc = pkgs.musl;
 
           xz = pkgs.xz;
           gzip = pkgs.gzip;
@@ -110,6 +111,7 @@ libc = pkgs.musl;
           lix = pkgs.lix;
           passt = pkgs.passt;
           bash = pkgs.bash;
+          gcc = pkgs.gcc;
           curlMinimal = pkgs.curlMinimal.overrideAttrs {configureFlags = import ./package-defs/curl_flags.nix;};
           curl = pkgs.curl.override {};
         };
