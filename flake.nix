@@ -102,6 +102,23 @@
           guile = pkgs.guile;
           lixStatic = pkgs.lixStatic;
           libc = pkgs.musl;
+	guile_3_0                 = pkgs.guile_3_0;
+	disarchive            = pkgs.disarchive;
+	guile-avahi           = pkgs.guile-avahi;
+	guile-gcrypt          = pkgs.guile-gcrypt;
+	guile-git             = pkgs.guile-git;
+	guile-gnutls          = pkgs.guile-gnutls;
+	guile-json            = pkgs.guile-json;
+	guile-lib             = pkgs.guile-lib;
+	guile-lzlib           = pkgs.guile-lzlib;
+	guile-lzma            = pkgs.guile-lzma;
+	guile-semver          = pkgs.guile-semver;
+	guile-sqlite3         = pkgs.guile-sqlite3;
+	guile-ssh             = pkgs.guile-ssh;
+	guile-zlib            = pkgs.guile-zlib;
+	guile-zstd            = pkgs.guile-zstd;
+	scheme-bytestructures = pkgs.scheme-bytestructures;
+
 
           xz = pkgs.xz;
           gzip = pkgs.gzip;
@@ -112,6 +129,7 @@
           passt = pkgs.passt;
           bash = pkgs.bash;
           gcc = pkgs.gcc;
+          openssl = pkgs.openssl;
           curlMinimal = pkgs.curlMinimal.overrideAttrs {configureFlags = import ./package-defs/curl_flags.nix;};
           curl = pkgs.curl.override {};
         };
