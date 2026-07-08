@@ -6,3 +6,4 @@ mapFlakes
 nix-conf/
 v
 b
+musl-notes
