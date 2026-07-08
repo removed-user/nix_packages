@@ -1,23 +1,19 @@
-# let
-#   stdenv = {...}: {
-#     buildPlatform.libc = "musl";
-#   };
-# in
 {
   inputs,
   system ? "x86_64-linux",
   # pkgs,
   ...
 } @ pkgs:
+# inputs.nixpkgs.legacyPackages.${system}.pkgsStatic
+# import inputs.nixpkgs.pkgsStatic {
 import inputs.nixpkgs {
   inherit system;
   # overlays = [inputs.self.overlays.default];
-  pkgs = inputs.nixpkgs.legacyPackages.${system};
   config = {
     # inherit pkgs;
     # overrideCC = inputs.nixpkgs.pkgs.musl;
     # libc = inputs.nixpkgs.pkgs.musl;
-    fetchedSourceNameDefault = full;
+    fetchedSourceNameDefault = "full";
     strictDepsByDefault = true;
     warnUndeclaredOptions = true;
     # nix = nix // lix;
