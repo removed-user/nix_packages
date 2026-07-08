@@ -1,0 +1,14 @@
+  localSystem = lib.systems.elaborate args.localSystem;
+
+  # Condition preserves sharing which in turn affects equality.
+  #
+  # See `lib.systems.equals` documentation for more details.
+  #
+  # Note that it is generally not possible to compare systems as given in
+  # parameters, e.g. if systems are initialized as
+  #
+  #   localSystem = { system = "x86_64-linux"; };
+  #   crossSystem = { config = "x86_64-unknown-linux-gnu"; };
+  #
+  # Both systems are semantically equivalent as the same vendor and ABI are
+  # inferred from the system double in `localSystem`.
