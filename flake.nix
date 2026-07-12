@@ -12,45 +12,32 @@
     self,
     ...
   } @ inputs: let
-    lib = nixpkgs.lib;
+    lib = inputs.nixpkgs.lib;
+    init_pkgs = inputs.nixpkgs.outPath + "/pkgs";
     flake-parts-lib = inputs.flake-parts.lib;
-    hostSystem.libc = "musl";
-    hostPlatform.libc = "musl";
-    crossSystem = {config = "x86_64-unknown-linux-gnu";};
-    localSystem = {
-      #     system = "x86_64-linux"
-      #   # isLinux = true;
-      libc = "musl";
-      #   # isMusl = true;
-      #   # abi = "musl";
-    };
     # bootStrap = {pkgs, ...}: pkgs.minimal-bootstrap;
-
-    # stdenv = pkgs.pkgsStatic;
     ###
     system = "x86_64-linux";
     ####  STDENV_ARGS
-    stdenv = stdenv.overrides {
-      hostPlatform.libc = "musl";
-    };
     ####  PKGS_ARGS
+    debug = true;
     pkgs = {
-      localSystem,
       inputs,
       system,
-      stdenv ? {inherit stdenv;},
+      stdenv,
       ...
     }: {
       inherit inputs system;
       imports = [./pkgs/main.nix];
     };
-    libc = "musl";
     ####  MODULE_ARGS
     _module.args = {
-      stdenv = {inherit stdenv;};
+      # stdenv = {inherit stdenv;};
       pkgs = {inherit pkgs;};
       system = {inherit system;};
-      libc = {inherit libc;};
+      stdenv = pkgs.pkgsMusl.stdenv;
+
+      # libc = {inherit libc;};
     };
     # stdenv = _module.args.stdenv;
     # _module.args.stdenv = {
@@ -62,13 +49,13 @@
     # };
   in
     flake-parts-lib.mkFlake {
+
       inherit inputs;
     }
     {
       systems = [
         "x86_64-linux"
       ];
-      # pkgs = {inherit pkgs;};
       imports = [
         # inputs.flake-parts.flakeModules.flakeModules
         inputs.flake-parts.flakeModules.modules
@@ -87,6 +74,7 @@
       ];
 
       perSystem = {
+	stdenv,
         config,
         self',
         pkgs,
@@ -98,11 +86,54 @@
           # inherit bootStrap;
           # list = builtins.attrNames bootStrap;
           system = null;
-          guix = pkgs.guix;
-          guile = pkgs.guile;
           lixStatic = pkgs.lixStatic;
           libc = pkgs.musl;
-	guile_3_0                 = pkgs.guile_3_0;
+
+        # guile = pkgs.guile;
+        guix = pkgs.guix;
+guix-env =
+pkgs.buildFHSEnv {
+name = "guix-env";
+targetPkgs = {
+pkgs,
+stdenv,
+config,
+...
+}:
+
+[
+
+"guile_3_0"
+"disarchive"
+"guile-avahi"
+"guile-gcrypt"
+"guile-git"
+"guile-gnutls"
+"guile-json"
+"guile-lib"
+"guile-lzlib"
+"guile-lzma"
+"guile-semver"
+"guile-sqlite3"
+"guile-ssh"
+"guile-zlib"
+"guile-zstd"
+"scheme-bytestructures"
+
+];
+};
+
+
+
+
+
+
+
+
+
+
+
+	guile_3_0             = pkgs.guile_3_0;
 	disarchive            = pkgs.disarchive;
 	guile-avahi           = pkgs.guile-avahi;
 	guile-gcrypt          = pkgs.guile-gcrypt;
@@ -119,19 +150,52 @@
 	guile-zstd            = pkgs.guile-zstd;
 	scheme-bytestructures = pkgs.scheme-bytestructures;
 
+        xz = pkgs.xz;
+        gzip = pkgs.gzip;
+        zlib = pkgs.zlib;
+        zstd = pkgs.zstd;
+        boehm-gc = pkgs.boehm-gc;
+        lix = pkgs.lix;
+        passt = pkgs.passt;
+        bash = pkgs.bash;
+        gcc = pkgs.gcc;
+        openssl = pkgs.openssl;
+        curlMinimal = pkgs.curlMinimal.overrideAttrs {configureFlags = import ./package-defs/curl_flags.nix;};
+        curl = pkgs.curl.override {};
+#MUSLPKGS
 
-          xz = pkgs.xz;
-          gzip = pkgs.gzip;
-          zlib = pkgs.zlib;
-          zstd = pkgs.zstd;
-          boehm-gc = pkgs.boehm-gc;
-          lix = pkgs.lix;
-          passt = pkgs.passt;
-          bash = pkgs.bash;
-          gcc = pkgs.gcc;
-          openssl = pkgs.openssl;
-          curlMinimal = pkgs.curlMinimal.overrideAttrs {configureFlags = import ./package-defs/curl_flags.nix;};
-          curl = pkgs.curl.override {};
+guix-musl = pkgs.pkgsMusl.guix;
+guile_3_0-musl = pkgs.pkgsMusl.guile_3_0;
+disarchive-musl = pkgs.pkgsMusl.disarchive;
+guile-avahi-musl = pkgs.pkgsMusl.guile-avahi;
+guile-gcrypt-musl = pkgs.pkgsMusl.guile-gcrypt;
+guile-git-musl = pkgs.pkgsMusl.guile-git;
+guile-gnutls-musl = pkgs.pkgsMusl.guile-gnutls;
+guile-json-musl = pkgs.pkgsMusl.guile-json;
+guile-lib-musl = pkgs.pkgsMusl.guile-lib;
+guile-lzlib-musl = pkgs.pkgsMusl.guile-lzlib;
+guile-lzma-musl = pkgs.pkgsMusl.guile-lzma;
+guile-semver-musl = pkgs.pkgsMusl.guile-semver;
+guile-sqlite3-musl = pkgs.pkgsMusl.guile-sqlite3;
+guile-ssh-musl = pkgs.pkgsMusl.guile-ssh;
+guile-zlib-musl = pkgs.pkgsMusl.guile-zlib;
+guile-zstd-musl = pkgs.pkgsMusl.guile-zstd;
+scheme-bytestructures-musl = pkgs.pkgsMusl.scheme-bytestructures;
+# guile-musl = pkgs.pkgsMusl.guile;
+
+xz-musl = pkgs.pkgsMusl.xz;
+gzip-musl = pkgs.pkgsMusl.gzip;
+zlib-musl = pkgs.pkgsMusl.zlib;
+zstd-musl = pkgs.pkgsMusl.zstd;
+boehm-gc-musl = pkgs.pkgsMusl.boehm-gc;
+lixStatic-musl = pkgs.pkgsMusl.lixStatic;
+lix-musl = pkgs.pkgsMusl.lix;
+passt-musl = pkgs.pkgsMusl.passt;
+bash-musl = pkgs.pkgsMusl.bash;
+gcc-musl = pkgs.pkgsMusl.gcc;
+openssl-musl = pkgs.pkgsMusl.openssl;
+curlMinimal-musl = pkgs.pkgsMusl.curlMinimal.overrideAttrs { configureFlags = import ./package-defs/curl_flags.nix;};
+curl-musl = pkgs.pkgsMusl.curl.override {};
         };
 
         # Equivalent to  inputs'.nixpkgs.legacyPackages.hello;
