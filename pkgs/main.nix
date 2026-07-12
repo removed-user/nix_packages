@@ -1,14 +1,10 @@
 {
   inputs,
   system ? "x86_64-linux",
-  # pkgs,
   ...
 } @ pkgs:
-# inputs.nixpkgs.legacyPackages.${system}.pkgsStatic
-# import inputs.nixpkgs.pkgsStatic {
-import inputs.nixpkgs {
+import inputs.nixpkgs.outPath {
   inherit system;
-  # overlays = [inputs.self.overlays.default];
   config = {
     # inherit pkgs;
     # overrideCC = inputs.nixpkgs.pkgs.musl;
@@ -20,4 +16,17 @@ import inputs.nixpkgs {
     structuredAttrsByDefault = true;
     checkMeta = true;
   };
+
 }
+
+#   hostSystem.libc = "musl";
+#   hostPlatform.libc = "musl";
+#   crossSystem = { config = "x86_64-unknown-linux-musl";};
+#   hostPlatform.config = "x86_64-unknown-linux-musl";
+#   localSystem = {
+#     #     system = "x86_64-linux"
+#     #   # isLinux = true;
+#     # libc = "musl";
+#     #   # isMusl = true;
+#     #   # abi = "musl";
+#   };
