@@ -1,4 +1,5 @@
-configureFlags = [
+
+[
 "--disable-ares"
 "--disable-ldap"
 "--disable-ldaps"
@@ -19,3 +20,4 @@ configureFlags = [
 "--without-rustls"
 "--with-zstd=${pkgs.zstd}"
 ];
+
