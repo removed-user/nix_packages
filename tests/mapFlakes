@@ -1,0 +1,3 @@
+builtins.mapAttrs
+fn = name: flake: flake.outPath name
+inputs
