@@ -1,0 +1,1 @@
+build-hook = /nix/store/wlpcwrjl0nk9c648fw267bafiwh9sllq-lix-2.95.2/bin/nix __build-remote

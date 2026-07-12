@@ -1,0 +1,1 @@
+ignored-acls = security.csm security.selinux system.nfs4_acl
