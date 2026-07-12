@@ -2,10 +2,6 @@
 /curl
 repl-result-out
 t
-mapFlakes
-nix-conf/
 v
 b
 musl-notes
-scr3.sh
-scr.sh
