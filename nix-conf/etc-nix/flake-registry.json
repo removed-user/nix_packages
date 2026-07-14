@@ -1,0 +1,84 @@
+{
+  "flakes": [
+    {
+      "from": {
+        "id": "bundlers",
+        "type": "indirect"
+      },
+      "to": {
+        "owner": "NixOS",
+        "repo": "bundlers",
+        "type": "github"
+      }
+    },
+    {
+      "from": {
+        "id": "flake-parts",
+        "type": "indirect"
+      },
+      "to": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
+    {
+      "from": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      },
+      "to": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    {
+      "from": {
+        "id": "lib",
+        "type": "indirect"
+      },
+      "to": {
+        "owner": "nix-community",
+        "ref": "master",
+        "repo": "nixpkgs.lib",
+        "type": "github"
+      }
+    },
+    {
+      "from": {
+        "id": "patchelf",
+        "type": "indirect"
+      },
+      "to": {
+        "owner": "NixOS",
+        "repo": "patchelf",
+        "type": "github"
+      }
+    },
+    {
+      "from": {
+        "id": "systems",
+        "type": "indirect"
+      },
+      "to": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    {
+      "from": {
+        "id": "templates",
+        "type": "indirect"
+      },
+      "to": {
+        "owner": "NixOS",
+        "repo": "templates",
+        "type": "github"
+      }
+    }
+  ],
+  "version": 2
+}
