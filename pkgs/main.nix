@@ -2,23 +2,23 @@
   inputs,
   system ? "x86_64-linux",
   ...
-} @ pkgs:
-import inputs.nixpkgs.outPath {
-  inherit system;
-  config = {
-    # inherit pkgs;
-    # overrideCC = inputs.nixpkgs.pkgs.musl;
-    # libc = inputs.nixpkgs.pkgs.musl;
-    fetchedSourceNameDefault = "full";
-    strictDepsByDefault = true;
-    warnUndeclaredOptions = true;
-    # nix = nix // lix;
-    structuredAttrsByDefault = true;
-    checkMeta = true;
-  };
-
-}
-
+} @ pkgs: let
+  pkgs = pkgs.pkgsMusl;
+in
+  import inputs.nixpkgs.outPath {
+    inherit system;
+    config = {
+      # inherit pkgs;
+      # overrideCC = inputs.nixpkgs.pkgs.musl;
+      # libc = inputs.nixpkgs.pkgs.musl;
+      fetchedSourceNameDefault = "full";
+      strictDepsByDefault = true;
+      warnUndeclaredOptions = true;
+      # nix = nix // lix;
+      structuredAttrsByDefault = true;
+      checkMeta = true;
+    };
+  }
 #   hostSystem.libc = "musl";
 #   hostPlatform.libc = "musl";
 #   crossSystem = { config = "x86_64-unknown-linux-musl";};

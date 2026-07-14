@@ -22,8 +22,8 @@
     ####  PKGS_ARGS
     debug = true;
     pkgs = {
-      inputs,
-      system,
+      inputs ? inputs,
+      system ? system,
       stdenv,
       ...
     }: {
@@ -49,7 +49,6 @@
     # };
   in
     flake-parts-lib.mkFlake {
-
       inherit inputs;
     }
     {
@@ -74,7 +73,7 @@
       ];
 
       perSystem = {
-	stdenv,
+        stdenv,
         config,
         self',
         pkgs,
@@ -89,113 +88,98 @@
           lixStatic = pkgs.lixStatic;
           libc = pkgs.musl;
 
-        # guile = pkgs.guile;
-        guix = pkgs.guix;
-guix-env =
-pkgs.buildFHSEnv {
-name = "guix-env";
-targetPkgs = {
-pkgs,
-stdenv,
-config,
-...
-}:
+          # guile = pkgs.guile;
+          guix = pkgs.guix;
+          guix-env = pkgs.buildFHSEnv {
+            name = "guix-env";
+            targetPkgs = {
+              pkgs,
+              stdenv,
+              config,
+              ...
+            }: [
+              "guile_3_0"
+              "disarchive"
+              "guile-avahi"
+              "guile-gcrypt"
+              "guile-git"
+              "guile-gnutls"
+              "guile-json"
+              "guile-lib"
+              "guile-lzlib"
+              "guile-lzma"
+              "guile-semver"
+              "guile-sqlite3"
+              "guile-ssh"
+              "guile-zlib"
+              "guile-zstd"
+              "scheme-bytestructures"
+            ];
+          };
 
-[
+          guile_3_0 = pkgs.guile_3_0;
+          disarchive = pkgs.disarchive;
+          guile-avahi = pkgs.guile-avahi;
+          guile-gcrypt = pkgs.guile-gcrypt;
+          guile-git = pkgs.guile-git;
+          guile-gnutls = pkgs.guile-gnutls;
+          guile-json = pkgs.guile-json;
+          guile-lib = pkgs.guile-lib;
+          guile-lzlib = pkgs.guile-lzlib;
+          guile-lzma = pkgs.guile-lzma;
+          guile-semver = pkgs.guile-semver;
+          guile-sqlite3 = pkgs.guile-sqlite3;
+          guile-ssh = pkgs.guile-ssh;
+          guile-zlib = pkgs.guile-zlib;
+          guile-zstd = pkgs.guile-zstd;
+          scheme-bytestructures = pkgs.scheme-bytestructures;
 
-"guile_3_0"
-"disarchive"
-"guile-avahi"
-"guile-gcrypt"
-"guile-git"
-"guile-gnutls"
-"guile-json"
-"guile-lib"
-"guile-lzlib"
-"guile-lzma"
-"guile-semver"
-"guile-sqlite3"
-"guile-ssh"
-"guile-zlib"
-"guile-zstd"
-"scheme-bytestructures"
+          xz = pkgs.xz;
+          gzip = pkgs.gzip;
+          zlib = pkgs.zlib;
+          zstd = pkgs.zstd;
+          boehm-gc = pkgs.boehm-gc;
+          lix = pkgs.lix;
+          passt = pkgs.passt;
+          bash = pkgs.bash;
+          gcc = pkgs.gcc;
+          openssl = pkgs.openssl;
+          curlMinimal = pkgs.curlMinimal.overrideAttrs {configureFlags = import ./package-defs/curl_flags.nix;};
+          curl = pkgs.curl.override {};
+          #MUSLPKGS
 
-];
-};
+          guix-musl = pkgs.pkgsMusl.guix;
+          guile_3_0-musl = pkgs.pkgsMusl.guile_3_0;
+          disarchive-musl = pkgs.pkgsMusl.disarchive;
+          guile-avahi-musl = pkgs.pkgsMusl.guile-avahi;
+          guile-gcrypt-musl = pkgs.pkgsMusl.guile-gcrypt;
+          guile-git-musl = pkgs.pkgsMusl.guile-git;
+          guile-gnutls-musl = pkgs.pkgsMusl.guile-gnutls;
+          guile-json-musl = pkgs.pkgsMusl.guile-json;
+          guile-lib-musl = pkgs.pkgsMusl.guile-lib;
+          guile-lzlib-musl = pkgs.pkgsMusl.guile-lzlib;
+          guile-lzma-musl = pkgs.pkgsMusl.guile-lzma;
+          guile-semver-musl = pkgs.pkgsMusl.guile-semver;
+          guile-sqlite3-musl = pkgs.pkgsMusl.guile-sqlite3;
+          guile-ssh-musl = pkgs.pkgsMusl.guile-ssh;
+          guile-zlib-musl = pkgs.pkgsMusl.guile-zlib;
+          guile-zstd-musl = pkgs.pkgsMusl.guile-zstd;
+          scheme-bytestructures-musl = pkgs.pkgsMusl.scheme-bytestructures;
+          # guile-musl = pkgs.pkgsMusl.guile;
 
-
-
-
-
-
-
-
-
-
-
-	guile_3_0             = pkgs.guile_3_0;
-	disarchive            = pkgs.disarchive;
-	guile-avahi           = pkgs.guile-avahi;
-	guile-gcrypt          = pkgs.guile-gcrypt;
-	guile-git             = pkgs.guile-git;
-	guile-gnutls          = pkgs.guile-gnutls;
-	guile-json            = pkgs.guile-json;
-	guile-lib             = pkgs.guile-lib;
-	guile-lzlib           = pkgs.guile-lzlib;
-	guile-lzma            = pkgs.guile-lzma;
-	guile-semver          = pkgs.guile-semver;
-	guile-sqlite3         = pkgs.guile-sqlite3;
-	guile-ssh             = pkgs.guile-ssh;
-	guile-zlib            = pkgs.guile-zlib;
-	guile-zstd            = pkgs.guile-zstd;
-	scheme-bytestructures = pkgs.scheme-bytestructures;
-
-        xz = pkgs.xz;
-        gzip = pkgs.gzip;
-        zlib = pkgs.zlib;
-        zstd = pkgs.zstd;
-        boehm-gc = pkgs.boehm-gc;
-        lix = pkgs.lix;
-        passt = pkgs.passt;
-        bash = pkgs.bash;
-        gcc = pkgs.gcc;
-        openssl = pkgs.openssl;
-        curlMinimal = pkgs.curlMinimal.overrideAttrs {configureFlags = import ./package-defs/curl_flags.nix;};
-        curl = pkgs.curl.override {};
-#MUSLPKGS
-
-guix-musl = pkgs.pkgsMusl.guix;
-guile_3_0-musl = pkgs.pkgsMusl.guile_3_0;
-disarchive-musl = pkgs.pkgsMusl.disarchive;
-guile-avahi-musl = pkgs.pkgsMusl.guile-avahi;
-guile-gcrypt-musl = pkgs.pkgsMusl.guile-gcrypt;
-guile-git-musl = pkgs.pkgsMusl.guile-git;
-guile-gnutls-musl = pkgs.pkgsMusl.guile-gnutls;
-guile-json-musl = pkgs.pkgsMusl.guile-json;
-guile-lib-musl = pkgs.pkgsMusl.guile-lib;
-guile-lzlib-musl = pkgs.pkgsMusl.guile-lzlib;
-guile-lzma-musl = pkgs.pkgsMusl.guile-lzma;
-guile-semver-musl = pkgs.pkgsMusl.guile-semver;
-guile-sqlite3-musl = pkgs.pkgsMusl.guile-sqlite3;
-guile-ssh-musl = pkgs.pkgsMusl.guile-ssh;
-guile-zlib-musl = pkgs.pkgsMusl.guile-zlib;
-guile-zstd-musl = pkgs.pkgsMusl.guile-zstd;
-scheme-bytestructures-musl = pkgs.pkgsMusl.scheme-bytestructures;
-# guile-musl = pkgs.pkgsMusl.guile;
-
-xz-musl = pkgs.pkgsMusl.xz;
-gzip-musl = pkgs.pkgsMusl.gzip;
-zlib-musl = pkgs.pkgsMusl.zlib;
-zstd-musl = pkgs.pkgsMusl.zstd;
-boehm-gc-musl = pkgs.pkgsMusl.boehm-gc;
-lixStatic-musl = pkgs.pkgsMusl.lixStatic;
-lix-musl = pkgs.pkgsMusl.lix;
-passt-musl = pkgs.pkgsMusl.passt;
-bash-musl = pkgs.pkgsMusl.bash;
-gcc-musl = pkgs.pkgsMusl.gcc;
-openssl-musl = pkgs.pkgsMusl.openssl;
-curlMinimal-musl = pkgs.pkgsMusl.curlMinimal.overrideAttrs { configureFlags = import ./package-defs/curl_flags.nix;};
-curl-musl = pkgs.pkgsMusl.curl.override {};
+          xz-musl = pkgs.pkgsMusl.xz;
+          gzip-musl = pkgs.pkgsMusl.gzip;
+          zlib-musl = pkgs.pkgsMusl.zlib;
+          zstd-musl = pkgs.pkgsMusl.zstd;
+          boehm-gc-musl = pkgs.pkgsMusl.boehm-gc;
+          lixStatic-musl = pkgs.pkgsMusl.lixStatic;
+          lix-musl = pkgs.pkgsMusl.lix;
+          passt-musl = pkgs.pkgsMusl.passt;
+          bash-musl = pkgs.pkgsMusl.bash;
+          gcc-musl = pkgs.pkgsMusl.gcc;
+          openssl-musl = pkgs.pkgsMusl.openssl;
+          curlMinimal-musl = pkgs.pkgsMusl.curlMinimal.overrideAttrs {configureFlags = import ./package-defs/curl_flags.nix;};
+          curl-musl = pkgs.pkgsMusl.curl.override {};
         };
 
         # Equivalent to  inputs'.nixpkgs.legacyPackages.hello;
